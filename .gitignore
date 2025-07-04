@@ -22,3 +22,40 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# === Maven / Gradle ===
+target/
+build/
+.gradle/
+!.mvn/wrapper/maven-wrapper.jar
+
+# === Eclipse / STS ===
+*.prefs
+*.classpath
+*.project
+.settings/
+
+# === IntelliJ IDEA ===
+.idea/
+*.iml
+*.iws
+out/
+
+# === VSCode ===
+.vscode/
+
+# === Node.js / React (for frontend or fullstack) ===
+node_modules/
+dist/
+.env
+.env.*.local
+
+# === OS별 무시 파일 ===
+.DS_Store
+Thumbs.db
+
+
+# === 기타 ===
+*.swp
+*.bak
+*.tmp
