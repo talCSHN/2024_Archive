@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Box Model2 - width와 height 퍼센트 단위</title>
+  </head>
+  <style>
+
+     /*  1. 부모 컨테이터 크기 미설정한 경우  */
+     #y{
+       width: 200px;
+       height: 100%;
+       background-color: yellow;
+     }
+
+     /*  2. 부모 컨테이터 크기 설정한 경우  */
+     #x2{
+      height: 500px;
+      background-color: beige;
+     }
+     #y2{
+       width: 200px;
+       height: 50%;  /* 가장 가까운 부모인 #x2 의 500px에 대한 50%(250px)가 적용됨 */
+       background-color: aqua;
+     }
+
+  </style>
+  <body>
+    <h1>1. 부모 컨테이터 크기 미설정한 경우</h1>
+    <div id="x">
+      <div id="y">
+        AAA
+      </div>
+    </div>
+   <h1>2. 부모 컨테이터 크기 설정한 경우</h1>
+   <div  id="x2">
+    <div id="y2">
+      AAA
+    </div>
+  </div>
+  </body>
+</html>

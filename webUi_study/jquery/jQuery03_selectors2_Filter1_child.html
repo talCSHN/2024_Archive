@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ready 메서드</title>
+  <!--다운로드 방식-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script></script>
+  <script>
+    
+    $(document).ready(function(){
+
+      //1. :first-child : 부모태그 기준의 첫번째 자식인 li 반환
+      //$("li:first-child").css("color", "red");
+      
+      //2. :last-child : 부모태그 기준의 마지막 자식인 li 반환
+      //$("li:last-child").css("color", "red");
+
+      //3. :nth-child(n) : 부모태그 기준의 n번째 자식인 li 반환
+      //$("li:nth-child(2)").css("color", "red");
+
+      //4. :nth-child(2n) : 부모태그 기준의 2n번째(2배수, 짝수) 자식인 li 반환
+      //$("li:nth-child(2n)").css("color", "red");
+
+      //5. :nth-child(2n+1) : 부모태그 기준의 2n+1번째(2배수+1, 홀수) 자식인 li 반환
+      //$("li:nth-child(2n+1)").css("color", "red");
+
+      //2. :only-child : 부모태그 기준의 유일한 자식인 li 반환
+      //$("li:only-child").css("color", "red");
+      
+
+    });
+    
+  </script>
+</head>
+<body>
+  <ul>
+    <li>AAAA</li>
+  </ul>
+  <ul>
+    <li>a</li>
+    <li>b</li>
+    <li>c</li>
+    <li>d</li>
+    <li>e</li>
+    <li>f</li>
+    </ul>
+</body>
+</html>

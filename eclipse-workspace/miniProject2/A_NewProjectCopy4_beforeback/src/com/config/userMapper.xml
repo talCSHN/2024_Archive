@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.config.userMapper">
+
+  	<select id="findAll" resultType="userDTO">
+  		select user_id, username, password, email, created_at, role
+  		from user_table
+  	</select>
+  	
+  	<insert id="save" parameterType="userDTO">
+  		insert into user_table ( username, password, email, created_at, role)
+  		values ( #{username}, #{password}, #{email}, #{created_at}, #{role} )
+  	</insert>
+  	
+  	<update id="update" parameterType="userDTO">
+  		update user_table
+  		set username=#{username}, password=#{password}, email=#{email}, created_at=#{created_at}, role=#{role}
+  		where user_id = #{user_id}
+  	</update>
+  	
+  	<delete id="remove" parameterType="int">
+  		delete from user_table
+  		where user_id = #{user_id}
+  	</delete>
+</mapper>

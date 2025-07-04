@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Box Model4 - padding1_기본</title>
+    <style>
+
+      div{
+        width: 100px;
+        height: 100px;
+        margin: 20px;
+        border: 1px solid red;
+        background-color:antiquewhite;
+      }
+
+      #a{
+        padding-top:30px;
+        padding-right:30px;
+        padding-bottom:30px;
+        padding-left:30px;
+      }
+
+      #b{
+        /* padding: top  right  bottom left  */
+        padding: 30px  30px  30px  30px; 
+      }
+
+      #c{
+        /*  padding: top  right|left bottom */
+        padding: 30px  30px  30px ;
+      }
+
+      #d{
+        /* padding: top|bottom  right|left */
+        padding: 30px  30px;
+      }
+
+      #e{
+        /* padding: top|bottom|right|left */
+        padding: 30px;
+      }
+    </style>
+  </head>
+  
+  <body>
+     <div id="a">hello1</div>
+     <div id="b">hello2</div>
+     <div id="c">hello3</div>
+     <div id="d">hello4</div>
+     <div id="e">hello5</div>
+  </body>
+</html>

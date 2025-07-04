@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>선택자6-속성7-속성값 또는 공백이 포함된 목록 찾아서 반환</title>
+    <style>
+      div[class~="en"]{
+        color: red;
+      }
+  
+    </style>
+  </head>
+
+  <body>
+    <div id="one">id="one"</div>
+    <div class="en" >class="en"(선택)</div>
+    <div class="kr en">class="kr en"(선택)</div>
+    <div class="kr"> class="kr"</div>
+    <div id="two" class="en-UK">class="en-UK"</div>
+  </body>
+</html>

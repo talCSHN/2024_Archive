@@ -1,0 +1,1472 @@
+
+MySQL 강좌정리
+
+0. 참조할 문서
+
+  오라클: https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/index.html#Oracle%C2%AE-Database
+
+  mysql:  https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/
+
+1. 환경설정
+ 
+  1) MySQL8 다운 및 설치
+    - 커뮤니티 버전 ( 무료 )
+    - https://dev.mysql.com/downloads/installer/
+   
+    - Windows (x86, 32-bit), MSI Installer	8.0.36	285.3M	
+
+
+   
+  2) 접속툴
+    - 자체적으로 설치: workbench ( GUI )
+                   command line client ( CMD )
+
+    - 다운로드 설치: DBeaver.zip
+                 ==> http://dbeaver.io/download
+                  Toad
+		  ...
+
+   3) 프로그램 언어(자바)
+      - JDBC( Java DataBase Connectivity) 기술이용
+      - JDBC 특징: DB 종류와 무관하게 연동 가능.
+                  Java SE 및 Java EE(웹) 무관하게 사용 가능.
+	     단점: SQLException이 발생됨.( 무조건 try~cacth 필요)
+
+
+    4) 실습에서 사용할 Database 생성 및 테이블 생성
+       Database 명: testdb
+       테이블: 
+               - 수업때 사용할 테이블: scott_mysql.sql 이용
+	                          dept 테이블
+				  emp 테이블
+				  salgrade 테이블
+
+	       - 워크샵 진행시 사용할 테이블 :  MySQL용_SQL워크샵스크립트.txt
+	                             tb_class
+				     tb_class_professor
+				     tb_department
+				     tb_grade
+				     tb_professor
+				     tb_student
+
+2. 데이터베이스 vs 데이터베이스 관리 시스템
+
+ 1) 데이터베이스(DataBase : DB)
+   - 개인,회사,관공서등에서 업무적으로 필요한 데이터 의미.
+ 
+ 2) 데이터베이스 관리 시스템 ( DataBase Management System : DBMS )
+   - DataBase(데이터)를 전문적으로 관리해주는 S/W 의미.
+   - 관리 방법? 보안
+              CRUD ( Create: 데이터 생성
+	             Read  : 데이터 조회
+		     Update: 데이터 수정
+		     Delete: 데이터 삭제 )
+	     사용자 생성
+	     Role 부여
+	     ...
+
+    - 데이터 저장 방법? 계층형 데이터베이스
+                    망형   데이터베이스
+		    객체지향 데이터베이스
+		    관계형 데이터베이스 (*): 행(레코드)과 열(컬럼)로 구성된 2차원 테이블형식으로 관리
+		    ..
+      
+3) 관계형 데이터베이스 (Relational DataBase : RDB) 
+          <=====> NoSQL ( Not only SQL ):{key:value}, 비정형 예> MongoDB, Casandra,....
+       
+  가. 개념
+    행(레코드)과 열(컬럼)로 구성된 2차원 테이블형식으로 관리
+   
+  나. 종류
+    - Oracle
+    - MySQL ( MariaDB 는 MySQL 문법이 거의 99% 비슷)
+    - MSSQL
+    - DB2
+    ...
+
+3. SQL (Structured Query Language )
+
+ 1) 개요
+  - RDB 에서 사용하는 프로그램 언어이다.
+  - 대소문 구별 안함. ( 식별자 의미 ) ==> mysql에서는 리터럴(값)도 대소문자 구별안함. oracle은 대소문자 구별함.
+  - 연산자
+  - 조건문
+  - 함수 ( 자바의 메서드 역할 )
+
+ 2) 종류 1
+
+    가. ANSI SQL
+      - 표준화된 SQL 의미.
+      - DBMS에 독립적 ==> 모든 DBMS에서 사용 가능(Oracle, MySQL, ... )
+
+
+    나. 비 ANSI SQL
+      - 표준화되지 않은 SQL 의미.
+      - DBMS에 의존적 ==> MySQL에서만 사용가능한 문법이 있다는 의미.
+
+ 3) 종류 2 ( 역할 )
+
+   가. 조회 ==> query 라고 부름.
+     - select 문 이용
+
+   나. 레코드-생성/수정/삭제 ==> DML(Data Manipulation Language: 데이터 조작어) 라고 부른다.
+     - 레코드 생성: insert 문
+     - 레코드 수정: update 문
+     - 레코드 삭제: delete 문
+
+   다. 테이블(객체:인덱스,뷰,프로시저,사용자)-생성/수정/삭제 ==> DDL ( Data Definition Language: 데이터 정의어 ) 라고 부른다.
+     - 테이블 생성: create 문
+     - 테이블 수정: alter  문
+     - 테이블 삭제: drop 문
+
+   라. 트랜잭션 명령어   ==> TCL( Transaction Control Language ) 라고 부른다.
+      - DML과 매우 밀접한 관련있음.
+      - commit 문
+      - rollback 문
+
+   마. etc
+      - 사용자생성/권한부여/권한취소 ...
+
+
+4. select 문
+
+  1) 기능 3가지
+   
+   - selection: 행 선택
+   - projection: 열 선택
+   - join(연결): 2 개 이상의 테이블 연결해서 selection 및 projection 처리.
+
+  2) 문법
+    
+    select 절
+    from 절; ( mysql 생략 가능, Oracle 생략  불가 )
+    ========> 항상 테이블의 모든 레코드 대상이다.
+              따라서 emp는 항상 14개가 반환된다.
+
+    - select 절: * (모든컬럼,all)
+                컬럼명,컬럼명2,...
+		컬럼명+10  ==> 연산가능
+		컬럼명 as 별칭 ==> 가독성, "별칭"
+		리터럴(값)
+		함수명(컬럼명)  ==> 함수가능
+		distinct 컬럼명 ==> 중복 제거
+    
+    - from 절;  테이블 명
+
+  
+  3) sql문에서 "" 와 '' 사용  ( ANSI )
+    - "" 는 별칭에서만 사용하자.
+    - '' 는 문자(열)값, 날짜값 ==> 리터럴(literal)
+     예>  'hello', 'a'
+          '2024-03-28'
+       
+      
+  4) null 값
+   
+    가. 정의?
+       - 테이블의 컬럼에 값이 없는 것.( 값 없음을 의미 )
+         select 하면 비워져서 보여짐.
+   
+    나. 특징
+       - 기본적으로 테이블의 모든 컬럼은 null 값을 가질 수 있다.
+         강제적으로 null이 아닌 값을 가지도록 할 수 있다. ( not null 제약조건  이용 )
+
+       - null 값 조회는  is null 연산자를 사용해야 된다. ( 부정: is not null )
+       - null 값의 연산결과는 null 값이 반환된다. (******)
+
+         예> 사원의 연봉 ?
+	    sal*12 ==> (sal*12) + comm 가 null 값이 나오는 사원도 있다.
+
+         컬럼값이 null 인경우에는 연산 가능하도록 null값을 임의의 값으로 변경하는 함수가 필요.
+	   
+	- ifnull(컬럼명, 기본값) ( Oracle 에서는 NVL(컬럼명, 기본값) )
+	   ==> (sal*12) + ifnull(comm, 0)
+
+        - null 값은 가장 작은 값으로 처리한다. ( Oracle에서는 가장 큰 값으로 처리 )
+
+	- 기본인 null 허용 ---------------> not null 제약조건으로 허용 불가 ( 변경작업 )
+
+	 
+5. select 문 + 조건지정
+
+  1) 문법:
+   
+     select 절
+     from 절
+     where 절;
+
+ 예> select *|컬럼명,컬럼명|컬럼명 as "별칭"|컬럼명+10|함수(컬럼명)|distinct 컬럼명|리터럴값  , projection기능
+    from 테이블명 
+    where 조건식;  // 조건식에 일치하는 레코드만 출력됨. selection 기능
+
+  2) 조건식에 사용되는 연산자
+
+   가. 비교연산자 1
+     
+      =   : 같냐? ( 자바에서는 == 사용됨 )
+      !=  : 같지 않냐?
+      >   : 크냐?
+      >=  : 크거나 같냐?
+      <   : 작냐?
+      <=  : 작거나 같냐?
+
+     ==> 수치, 날짜, 문자도 사용 가능
+     ==> 날짜는 내부적으로 수치형으로 관리
+
+         기준시간: 1970-01-01  ------------------------> 현재
+
+   나. 비교 연산자 2
+      범위로 조회
+
+     - Between A and B: A 부터 B 까지 포함된 레코드 반환.
+                       A와 B 포함됨.
+     - 수치, 날짜, 문자도 사용 가능
+                      
+
+   다. 비교연산자 3
+      한꺼번에 여러개 지정
+
+      - IN (값, 값2, 값3)  : 값 또는 값2 또는 값3
+      - 수치, 날짜, 문자도 사용 가능
+
+   
+   라. like 연산자
+      - 패턴으로 조회 가능
+
+     * 2개의 와일드카드 문자와 같이 사용 ==> 특정문자(들)와 치환이 된다.
+
+      % : 없거나 여러개 치환 가능
+        예> where ename LIKE '%A';   // A로 끝나는
+           where ename LIKE 'A%';   // A로 시작는
+           where ename LIKE '%A%';   // A가 포함되는
+     
+      _ : 반드시 하나의 문자와 치환
+        예> where ename LIKE '__A';  // 3글자면서 A로 끝나는
+
+      %와 _ 혼합 사용 가능:
+        예> where ename LIKE '_A%';  // 두번째 글자가 A로 시작하는
+
+     * 산술연산자에서 % 가능하지만 MOD() 권장함.
+
+      - % 나 _ 를 포함하는 이름을 찾을  수 있다.
+
+      예> ename
+         ------
+	 AAA_BBB
+	 AAA%BBB
+	 _XXXYYY
+
+	==> ename LIKE '%\_%';   // \뒤에 오는 와일드카드 문자를 그냥 일반문자로 처리함. ( oracle 불가 )
+
+        ==> ename LIKE '%$_%' ESCAPE '$'; // 임의의 문자 뒤에 오는 와일드카드 문자를 그냥 일반문자로 처리함.
+	                                     ( oracle 가능 )
+ 
+
+   마. null 조회
+    
+     - IS NULL 사용
+
+
+
+   바. 정렬
+     => 기본적으로 테이블내에 저장되는 데이터는 정렬이 안된 상태이다.
+      
+     - 정렬방법
+       오름차순(기본) :  asc|ASC
+       내림차순      :  desc|DESC
+
+     - 문법
+
+        select 컬럼명 as A, 컬럼명2 as B
+	from 테이블명
+	where 조건식(연산자)
+	order by 표현식(컬럼명|별칭|select절지정된위치1부터)  ASC|DESC   ;
+    
+     - 다중정렬
+
+        order by 표현식1,  표현식2;
+
+      예> order by sal desc, empono; ==> sal로 정렬하고 같은 sal들만 뽑아서 다시 empno로 재정렬함.
+         order by 별칭 desc, 별칭;
+	 order by 1 desc, 3;
+
+   정리
+        select     3번: 지정된 컬럼만 선택
+	from       1번 : 14개의 레코드
+	where      2번 : 조건에 의한 필터링, 10개 추출됨
+	order by   4번: 지정된 정렬로 출력됨.
+
+####################################################################
+2일차 ( 3월 29 일 )
+
+1. 함수(function)
+
+  1) 역할: 데이터 가공처리
+  2) 종류:
+
+      가. 단일행 함수 ( single row function )
+         - 테이블의 행(레코드) 단위로 적용되는 함수 의미.
+         - 데이터별 종류
+	   a. 문자데이터
+	      - 길이,부분열,대문자,소문자,공백제거,...
+	   b. 수치데이터
+	      - 반올림, 절삭, 부호식별,절대값,...
+	   c. 날짜 ( Oracle 함수와 완전히 다르다.)
+	      - 현재날짜,시간, 연산, 특정날짜추출(년도,월,시간,...)
+           
+	   d. 변환함수
+	      - 숫자==> 문자, 문자==> 숫자
+	        날짜==>문자 , 문자==>날짜
+
+		 숫자 <----> 문자 <----->날짜
+
+	   e. etc
+	      - ifnull, case, if
+
+      나. 그룹 함수 ( group function)
+         - 테이블의 그룹 단위로 적용되는 함수 의미
+	  예> 부서별, 성별
+         - 총합,평균,최대,최소,갯수
+	   sum(), avg(), max(), min(), count()
+	 
+2. 단일행 함수: 문자데이터
+https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/string-functions.html
+   - upper()
+   - lower()
+   - length()
+   - substr(), substring(), left(), right()
+   - lpad(), rpad()
+   - ltrim(), rtrim(), trim()
+   - concat(n,n2,..)
+   - concat_ws(구분자,n,n2,.)
+   - format()
+   - instr()
+   - replace()
+   - space(n)
+   - repeat()
+   - reverse()
+
+3. 단일행 함수: 수치데이터
+https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/numeric-functions.html
+   - round
+   - truncate
+   - ceil
+   - floor
+   - sign
+   - mod
+   - abs
+ 
+4. 단일행 함수: 날짜데이터
+https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/date-and-time-functions.html
+   
+    - curdate() : 'yyyy-MM-DD'
+    - curtime() : 'hh:mm:ss'
+    - now(), sysdate()
+
+    - adddate()
+    - date_date()
+      date_sub()
+
+    - datediff() 
+    - TIMESTAMPDIFF()
+    - last_day()
+    - extract()
+    - date_format() : 날짜를 문자열로 변환
+    - str_to_date():  문자를 날짜로 변환
+
+5. 단일행 함수: 조건처리
+    - case ~ end ( ANSI )
+    - if()
+
+6. 단일행 함수: 형변환 함수
+https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/cast-functions.html
+
+   - cast()
+   - convert()
+
+##########################################################################
+7. 그룹함수
+https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/aggregate-functions.html
+ 
+  ==> 그룹단위로 적용됨.
+     만일 명시적으로 그룹으로 묶는 작업을 안하면 자동으로 전체 레코드를 하나의 그룹으로 묶음.
+  ==> 기본적으로 그룹함수는 null 제외하고 처리됨.
+  ==> group by로 묶지 않는 컬럼은 select 절에 그룹함수와 같이 사용 불가.
+      그룹함수와 같이 사용할려면 반드시 group by로 그룹핑해야 된다.
+      예> select deptno, sum(sal) // 에러
+         from emp;
+     해결:
+         select deptno, sum(sal)
+         from emp
+	 group by deptno;
+    
+      예> select deptno, hiredate, sum(sal)
+         from emp
+         group by deptno, hiredate;
+
+  ==> where 절에는 그룹함수 사용 불가.
+      having 절, order y 절에도 사용 가능
+  ==> group by 표현식
+      mysql: 표현식에 컬럼명|별칭|순서 모두 가능
+      oracle: 별칭|순서 사용 불가
+
+  1) 종류
+     sum(컬럼)
+     avg(컬럼)
+     max(컬럼)
+     min(컬럼)
+     count(컬럼|*) : 레코드 갯수
+                  : count(*) 는 null 여부와 무관하게 전체 레코드 갯수를 반환함.
+
+  2) 명시적으로 그룹으로 묶는 방법
+  
+    문법: 
+        group by 표현식, 표현식   // 다중그룹
+	
+	mysql: 표현식에 컬럼명|별칭|순서 모두 가능
+	oracle: 별칭|순서 사용 불가
+
+     select  sum(sal), 그룹함수  // 4번
+     from        // 1번
+     where       // 2번
+     group by deptno    // 3번 부서별
+     order by        ;  // 5번
+
+  3) 그룹에 대한 필터링
+
+     select  sum(sal), 그룹함수  // 5번
+     from        // 1번
+     where 조건식  // 2번: 1번에 대한 필터링
+     group by deptno // 3번 부서별
+     having 조건식     // 4번: 3번에 대한 필터링
+     order by        ;  // 6번
+
+
+####################################################################
+3일차 ( 4월 01 일 )
+
+1. 조인(join)
+ https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/join.html
+
+  1) query 작업 ( select 문)
+
+     - selection: 행 선택, where 절 이용
+     - projection: 컬럼 선택, select 절 이용
+     - join  :  여러 테이블 연결
+
+  2) 개념
+     - select해서 출력하고자 하는 데이터가 하나의 테이블이 아닌
+       여러 테이블(2개 이상)에 분산되어 있는 경우에 테이블을 연결해서 원하는 
+       데이터를 출력할 수 있다.
+
+  3) 조인 방법 종류1
+  
+     가. inner 조인
+        - 2 개의 테이블 연결시 반드시 일치되는 데이터만 반환.
+	  즉 일치하지 않으면 누락됨.
+
+     나. outer  조인
+        - inner 조인 + 일치되지 않아서 누락된 데이터 포함 반환.
+
+  4) 조인 방법 종류 2
+
+     가. ANSI 조인 (*)
+        - DBMS 독립적
+
+     나. 비 ANSI 조인 
+        - DBMS 의존적
+        예> 오라클 조인 
+
+  5) 조인 방법 종류 3 ( ANSI 문법 )
+
+     # inner 조인방법
+     - cross join
+     - natural join
+     - join~ using(공통컬럼)
+
+     - join~ on : 범용적
+     - self join ==> 자신이 자신을 조인하는  방법.
+                     예> 사원의 관리자명 조회
+
+     # outer 조인방법
+     - left outer join ~ on|using
+     - right outer join ~ on|using
+      ==> 양쪽 테이블에 누락된 레코드 조회는 union(합집합)으로 가능하다.
+
+     - full outer join ~ on|using ( MySQL 지원안됨. Oracle 지원됨 )
+      
+
+2.  2개의 테이블 연결하는 방법 알기전 선수과정 
+
+  가. 5가지 제약조건 타입 ( constraints ) - ************
+    용도: 테이블에 저장되는 데이터 검증용. ( 무결성 데이터 보장 )
+
+    ==> 테이블의 컬럼단위로 지정.
+    ==> 제약조건 정보보기
+    select  *
+    from information_schema.table_constraints
+    where table_name = 'emp';
+
+   - primary key (pk 라고 부름) => not null 제약조건 + unqiue 제약조건
+     목적: 레코드 식별용
+     특징: -값이 존재 ( null 값 불가 , not null 제약조건)
+          -중복 불가 ( unqiue 제약조건 )
+	  -테이블당 하나만 설정 가능
+	  -복합컬럼 가능 예> 수강테이블에서 (학번,과목)
+          -제약조건을 추가(*)하는 기능
+	  -자동으로 인덱스(색인표 역할) 추가됨.
+
+      emp테이블의 pk는 empno,
+      dept테이블의 pk는 deptno
+
+   - unique ( uk 라고 부른다. )
+      목적: 중복값 저장 불가
+      특징: - 값이 없어도 된다. (null 값 허용)
+           - 테이블당 여러개 설정 가능
+	   - 복합컬럼 가능
+           - 제약조건을 추가(*)하는 기능
+           - 자동으로 인덱스(색인표 역할) 추가됨. 
+
+
+   - check  ( ck 라고 부른다. )
+      목적: 비즈니스 로직 검증 역할로서
+           저장되는 데이터의 범위를 제한.
+          예> 성별
+	     ----
+	     남/여 (*)
+	     남자/여자
+	     M/F
+	     0/1
+        
+           gender  check ( gender in ('남','여'))
+           age     check ( age < 100 )
+
+   - foreign key ( fk, 참조키, 외래키 라고 부른다. )
+      목적: 다른 테이블을 참조하는 역할. ( 2개 테이블의 연결고리 )
+
+         예>
+	 emp 테이블 ( slave, child 테이블 )         dept 테이블 ( master, parent 테이블 )
+	 empno(pk) ename  ....  deptno(fk)        deptno(pk)   dname   loc
+	 --------------------------             ----------------------
+	 7459  SMITH          20                     10
+                                                     20     RESERCH  DALLS
+						     30
+                              50(저장불가)             40
+			      null(가능)              
+
+      특징: - 반드시 fk는 master의 PK로 된 컬럼 또는 UK로 된 컬럼만 참조할 수 있다.(*****)
+           - fk가 가질수 있는 값은  master의 PK로 된 컬럼의 값 또는 UK로 된 컬럼의 값만 저장할 수 있다.
+	     추가로 null 값 저장 가능
+	     결론은 fk가 가질수 있는 값은 3가지 ( master의 pk + uk + null )
+	   - 테이블당 여러개 설정 가능   
+           - 제약조건을 추가(*)하는 기능
+
+
+   - not null
+      목적:  null 허용 불가 ( 반드시 값을 가져야 됨. 중복 가능 )
+      특징: - 기본적으로 모든 테이블의 컬럼은 null 허용한다. (******)
+             null ----------> not null
+	            변경
+		  
+           - 제약조건을 변경(*)하는 기능
+          
+
+
+ 
+   나. 조인 기본 동작
+
+     - pk 와 fk 이용
+       pk: master 의 pk
+       fk: slave 의 fk
+     ==> 연산자를 사용한다면 동등연산자 ( = ) 사용.
+     ==> equi 조인이라고도 부른다.
+     ==> 조인 이라고 하면 equi 조인 (pk와 fk사용)을 의미한다.
+     ==> inner 조인
+
+     - 일반컬럼 와 일반컬럼 이용
+      ==> 범위로 조인하기 때문에 non-equi 조인이라고 부른다.
+      ==> inner 조인
+       예>
+         emp 테이블                            salgrade 테이블
+ 
+    empno ename   sal                     grade  losal  hisal
+    ----------------                       ----------------------
+    7379 SMITH     800                      1      700   1200
+
+ 
+
+3. cross join
+
+ 1) 문법:
+
+    select
+    from 테이블1  cross join 테이블2;
+
+ 2) 동작
+   테이블1의 하나의 행과 테이블2의 여러 행과 조인됨.
+   따라서 테이블1의 행갯수 *  테이블2의 행갯수 한 결과가 나옴.
+ 
+ 3) 특징
+   - 데이터로 사용 불가
+
+ ==> 조인할 때는 조인 조건을 생략하거나 잘못 지정한 경우에는
+     잘못된 결과를 반환할 수 있다.
+
+ ==> 테이블이 n개인 경우 반드시 n-1 개의 조인이 필요하다.
+
+
+4. natural join
+ 
+ 1) 문법1:
+
+    select
+    from 테이블1  natural join 테이블2;
+
+ 1) 문법2:
+
+    select 별칭.컬럼명, ,,,,    별칭.공통컬럼      // oracle에서는 공통컬럼에 별칭사용 불가 
+    from 테이블1 별칭 natural join 테이블2 별칭;   // as 사용불가
+ 
+ 2) 동작
+   - 테이블1 과 테이블2에서 공통컬럼을 찾아서 조인한다. ( 조인조건 )
+   - 만약 공통컬럼이 2개라면 쌍으로 비교한다.
+
+ 3) 특징
+    - 반드시 공통컬럼이 존재해야 된다.
+    - 단점은 어떤 컬럼으로 조인했는지를 추가로 확인하는 작업이 필요하다. (가독성 떨어짐)
+    - inner 조인. 
+      따라서 실습에서는 dept 테이블의 deptno가 40 인 레코드는 반환이 안됨.
+
+ 4) 검색조건
+    - where 절 이용
+   
+    - 문법
+
+    select                            // 3번 
+    from 테이블1  natural join 테이블2   // 1번 
+    where 조건식;                      // 2번
+
+ ==> ANSI 조인 특징
+     조인조건은 from 절에서 지정하고
+     검색조건은 where 절에서 지정한다.
+
+     Oracle 조인은 where 절에서 조인조건과 검색조건을 같이 지정한다.
+     예>
+         select 
+	 from emp e , dept d
+	 where e.deptno = d.deptno;   //조인 조건
+
+
+          select 
+	 from emp e , dept d
+	 where e.deptno = d.deptno   //조인 조건
+	       and e.deptno = 30;    //검색 조건
+
+
+5. using 절
+
+   1) 문법1:
+    select
+    from 테이블1 [inner] join 테이블2 using(공통컬럼);
+
+   1) 문법2:
+    select 별칭.컬럼명,,........, 별칭.공통컬럼
+    from 테이블1 별칭 join 테이블2 별칭 using(공통컬럼);
+
+   2) 동작
+   - 테이블1 과 테이블2에서 using절에 지정한 공통컬럼을 찾아서 조인한다. ( 조인조건 )
+   
+   3) 특징
+      - using절 지정하는 공통컬럼에는 별칭사용 불가.
+        예> using(별칭.공통컬럼); // 에러
+      - inner 조인
+
+   4) 검색조건 지정 가능
+       select                                  //3번
+       from 테이블1  join 테이블2 using(공통컬럼)   //1번 조인조건
+       where 조건식;                            //2번 검색조건
+
+
+====> natural join 또는 using(공통컬럼) 모두 공통컬럼이 반드시  존재해야 됨.
+
+6. on 절 ( 가장 범용적으로 사용됨 )
+
+   1) 문법1:
+    select
+    from 테이블1 [inner] join 테이블2 on 테이블1.컬럼 = 테이블2.컬럼;
+
+  1) 문법2:
+    select
+    from 테이블1 별칭1 [inner] join 테이블2 별칭2 on 별칭1.컬럼 = 별칭2.컬럼;
+
+  
+  2) 동작
+   - 테이블1 과 테이블2에서 on절에 지정한 조건으로 조인한다. ( 조인조건 )
+   - 조건은 동등(=)이거나 부등( between A and B , in 등 )도 가능하다.
+
+   3) 특징
+      - 공통컬럼은 반드시 별칭사용 해야 됨. ( using 절과 반대 )
+
+   
+  4) 검색조건 지정 가능
+
+    select                                                    // 3번
+    from 테이블1 [inner] join 테이블2 on 테이블1.컬럼 = 테이블2.컬럼  // 1번, 조인 조건
+    where 조건식;                                              // 2번, 검색조건
+
+
+7. self 조인
+
+  1) 개념
+    - 자신이 자신을 조인하는 개념
+
+  2) 샘플 예
+
+   - 사원명과 관리자명 출력하기
+   
+  3) 구현방법
+    - 별칭 이용
+
+                       원본  emp
+               empno ename job mgr hiredate sal comm deptno
+  		-------------------------------------------
+	       7369  SMITH     7902 
+
+	       ..
+
+	       7902  FORD
+
+
+
+ 가상 테이블  emp e                                        가상테이블  emp m
+
+ empno ename  mgr                                       empno ename
+ ----------------                                     ---------------
+ 7369  SMITH  7902                                      7369  SMITH
+                                                        7902  FORD
+
+	   select *
+	   from emp e join emp m ON e.mgr = m.empno;
+
+
+ ========> 조인조건이 일치한 행만 반환하는 INNER 조인이다.
+           일치하지 않은 행은 누락됨.
+
+
+8. outer 조인
+ 
+ 1) 개념:
+   조인조건이 일치한 행만 반환하는 INNER 조인이다.
+   일치하지 않은 행은 누락됨.
+   이때 누락된 행까지 포함해서 반환받을 수 있는 방법이다.
+
+ 2) 문법:
+
+      select 
+      from  테이블1  LEFT OUTER JOIN  테이블2  using(공통컬럼)|on 절;
+      
+      ==> 테이블1 의 모든 행이 반환됨. (일치하지 않아도 )
+
+      select 
+      from  테이블1  RIGHT OUTER JOIN  테이블2  using(공통컬럼)|on 절;
+      
+      ==> 테이블2 의 모든 행이 반환됨. (일치하지 않아도 )
+
+
+    * 테이블1 과 테이블2 양쪽 모두 누락된 데이터를 한번에 반환은 불가.
+     ( Oracle 에서는 Full OUTER JOIN 지원됨 )
+
+      단, union(합집합) 이용하면 반환 가능함.
+
+      select 
+      from  테이블1  LEFT OUTER JOIN  테이블2  using(공통컬럼)|on 절
+      union
+      select 
+      from  테이블1  RIGHT OUTER JOIN  테이블2  using(공통컬럼)|on 절;
+
+  
+  3) 검색조건 
+
+      select                                                    // 3번  
+      from  테이블1  LEFT OUTER JOIN  테이블2  using(공통컬럼)|on절   // 1번 조인조건
+      where 조건식;                                               // 2번 검색조건
+ 
+#####################################################################################
+
+9. 서브쿼리 ( subquery )
+
+ 1) 개념(목적)
+   - 한 번의 select문으로는 원하는 결과를 못 얻을 때,
+     여러 개의 select문을 사용해서 원하는 결과를 얻을 수 있음.
+
+2) 문법
+
+
+ 예> emp 테이블에서 SCOTT 사원보다 많은 급여를 받는 사원의 이름을 검색 하시오. 
+
+    가. scott 의 sal ?   3000
+
+        select sal
+	from emp
+	where ename = 'scott';
+
+
+    나. 3000 보다 많은 급여 사원 ?
+       
+        select *
+	from emp
+	where sal > 3000;
+
+
+ ==> 문법은 3000 위치에 select 문으로 치환하자.
+ 
+        # main query
+        select *
+	from emp   
+	where sal >  # sub query
+	            (select sal  
+	            from emp
+	            where ename = 'scott');
+        order by ;
+
+  3) 특징
+    - 소괄호를 사용
+    - 일반적으로 소괄호를 감싼 subquery가 먼저 실행되고 실행된 
+      결과를 가지고 mainquery 사용됨. (mainquery가 먼저 실행될 수도 있음)
+    - main query의 where 절에 사용가능.
+      하지만 거의 모든 sql에 사용이 가능하다. 
+      from,having,select, insert,delete,update, create 모두 사용 가능.
+    - main query에서만 order by 사용 가능
+
+  4) 주의할 점은 사용되는 연산자가 2가지가 있음
+
+    가.  단일행 연산자
+        - subquery 실행결과가 하나의 행만 반환되는 경우에 사용되는 연산자 의미
+        - 비교 연산자 ( =, >, >=, <, <= )
+
+    나.  복수행 연산자
+       - subquery 실행결과가 여러 행 반환되는 경우에 사용되는 연산자 의미
+       - IN, > any, > all,  < any, < all, exists 
+       
+    > all:  최대값보다 큰 값 반환    ( > (select max(sal) )
+    < all:  최소값보다 작은 값 반환  ( < (select min(sal) )
+    > any:  최소값보다 큰 값 반환    ( > (select min(sal) )
+    < any:  최대값보다 작은 값 반환   ( > (select max(sal) )
+
+ 5) 복수행 연산자
+
+   가. > all  :  서브쿼리의 최대값 보다 큰 값을 반환함.
+              :  max(sal) 로도 구현 가능
+      예>
+           select
+	  from 
+	  where sal > all ( select sal  
+	                    from emp );
+          
+          select
+	  from 
+	  where sal > ( select max(sal)  
+	                    from emp );
+
+          select
+	  from 
+	  where sal > all ( 100
+	                    200
+	                    300      );
+	                     
+  나. < all :   서브쿼리의 최소값 보다 작은 값을 반환함.
+            :   min(sal) 으로도 구현 가능
+
+     예>
+
+          select
+	  from 
+	  where sal < all ( select sal  
+	                    from emp );
+          
+          select
+	  from 
+	  where sal < ( select min(sal)  
+	                    from emp );
+
+
+          select
+	  from 
+	  where sal < all ( 100
+	                    200
+	                    300      );
+
+
+  다.  > any  : 서브쿼리의 최소값 보다 큰 값을 반환함.
+              :  min(sal)
+
+
+        예>
+
+           select
+	  from 
+	  where sal > any ( select sal  
+	                    from emp );
+          
+          select
+	  from 
+	  where sal > ( select min(sal)  
+	                    from emp );
+
+	  select
+	  from 
+	  where sal > any ( 100
+	                    200
+	                    300 );
+
+ 라.   < any:  서브쿼리의 최대값 보다 작은 값을 반환함.
+              :  man(sal)
+
+  
+     예>
+
+          select
+	  from 
+	  where sal < any ( 100
+	                    200
+	                    300 );
+ 
+    > all:  최대값보다 큰 값 반환    ( > (select max(sal) )
+    < all:  최소값보다 작은 값 반환  ( < (select min(sal) )
+    > any:  최소값보다 큰 값 반환    ( > (select min(sal) )
+    < any:  최대값보다 작은 값 반환   ( > (select max(sal) )
+
+
+ 마. exists
+
+   문법: 
+        select
+	from 
+	where exist ( 서브쿼리 )
+
+    서브쿼리가 실행후 결과가 있으면 mainquery를 실행하고
+    서브쿼리가 실행후 결과가 없으면 mainquery를 실행안함.
+
+
+10. 인라인 뷰( inline view )
+
+ 1) 개념
+    메인쿼리에서 from 절에 오는 서브쿼리를 의미한다.
+
+ 2) 문법
+
+    select
+    from (subquery) 별칭
+    where ~ ;
+
+ 3) 용도
+    - 성능이슈
+
+  예>
+   --  emp 와 dept 테이블에서 부서별 sal총합과 평균을 출력?
+	select  e.deptno, sum(sal), ROUND(avg(sal)), count(*)
+	from emp e join dept d on e.deptno = d.deptno  -- emp: 15개와 dept: 4개가 조인에 참여함
+	group by deptno;
+
+	 SELECT e.deptno, total_sum, total_avg, cnt
+	 FROM (SELECT deptno, SUM(sal) total_sum, ROUND(AVG(sal)) total_avg,COUNT(*) cnt
+                 FROM emp
+                 GROUP BY deptno) 
+	     e JOIN dept d ON e.deptno = d.deptno;  -- 4개의 서브쿼리 dept: 4개가 조인에 참여함
+
+####################################################################
+4일차 ( 4월 02 일 )
+
+
+1. DML ( Data Manipulation Language: 데이터 조작어 )
+
+  1) 종류
+    - insert 문
+       테이블의 레코드 생성
+       upsert(update+insert)
+        ==> 값이 존재하면 update되고 없으면 insert.
+
+    - delete 문
+       테이블의 레코드 삭제
+
+    - update 문
+       테이블의 컬럼 수정
+
+  2) 특징
+    
+     - 트랜잭션(transaction) 관련됨.
+
+
+2. 트랜잭션(transaction)
+
+ 1)개념
+  여러개의 DML 작업들을 하나의 작업으로 묶어서 처리하는 개념으로 
+  묶음을 의미한다. 묶음의 갯수 ( 1개 이상 )
+
+ 2)명령어
+  
+    - commit
+      트랜잭션이 모두 실행했을때 성공해서 실제로 DB에 반영하는 명령어.
+      즉 모든 DML은 실행되었을 때 실제 DB에 반영안됨. (***********)
+
+    - rollback
+
+  3) 트랜잭션 용도
+
+   예>  계좌이체 ( update + insert )
+
+      A               B
+     1000
+
+   # 성공시 - commit 으로 실제 DB에 반영
+     A                B 
+    500             500
+
+   # 실패시 - rollback 으로 모두 취소.
+    A               B
+   1000
+
+  4) 트랜잭션시작 ~ 트랜잭션 종료
+
+    트랜잭션시작: DML 사용시 자동으로 시작됨.
+
+     예> 
+                 <-- 트랜잭션시작
+           insert 
+	   delete
+	   update
+           commit(rollback); <--트랜잭션 종료
+
+   트랜잭션 종료: 명시적으로 종료해야 된다.
+              commit은 실제 DB에 반영하는 방식으로 종료.
+	      rollback은 취소하는 방식을 종료
+
+  5) DBMS 종류에 따라서 auto commit 될 수 있다.
+    ==> DML하면 자동으로 commit 되는 것을 의미한다. 비활성 가능
+    ==> Oralce: 명시적으로 commit 해야 됨
+        MySQL : auto commit
+
+
+
+
+3. INSERT 
+
+ 1) 용도
+   -새로운 레코드 생성.
+   -단일행 생성(*) 또는 멀티행 생성 모두 가능
+
+ 2) 문법 1 - 단일행 생성하는 방법
+ 
+    가. 컬럼명 지정한 경우 ( 권장 )
+          insert into 테이블명 (컬럼명, 컬럼명1 )
+	  values ( 값, 값1 );  # 문자와 날짜는 반드시 ''  로 지정해야 된다.
+          commit;
+     ==> 선택적으로 값을 저장이 가능.
+         나머지는 null로 저장됨.
+     ==> 가독성이 좋다. 
+
+    나. 컬럼명 생략한 경우 ( 권장안함)
+          insert into 테이블명 
+	  values ( 값, 값1, ..., 값6 ); # 문자와 날짜는 반드시 ''  로 지정해야 된다.
+	  commit;
+      ==> 선택적으로 값 저장이 불가.
+          반드시 테이블의 모든 컬럼에 값을 저장해야 된다.
+      ==> 지정된 값 순서대로 실제 테이블의 컬럼에 맵핑된다.
+      ==> 가독성이 떨어진다.
+
+ 3) 주의할점
+
+    - pk 컬럼에는 중복값이 저장 안되고 null 값 저장 불가
+    - not null 제약조건을 추가한 컬럼에는 반드시 값을 지정해야 된다.
+
+
+4) 문법 2 - 다중행 생성하는 방법
+
+   # 실습전에 새로운 테이블 생성하자.
+      CTAS 방법 : 제약조건은 복사가 안됨.
+
+     Create Table 테이블명
+     As
+     Select 문;
+         # 구조만 복사해서 새로운 테이블 생성
+         CREATE TABLE copy_emp
+	 AS
+	 SELECT empno, ename, sal FROM emp
+	 WHERE 1=2;
+ 
+   가. subquery 이용
+
+      문법:
+           insert into 테이블명 (컬럼명, 컬럼명1 )
+	   select 컬럼명, 컬럼명2
+	   from 테이블명;
+	
+   나. value_list 이용 (**********)
+
+     문법:
+           insert into 테이블명 (컬럼명, 컬럼명1 )
+	   values ( 값, 값1 ),( 값, 값1 ),( 값, 값1 );
+
+
+
+
+4. update 문
+ 1) 용도
+   - 컬럼 수정.
+
+ 2) 문법
+
+   가. 조건없는 update
+     ==> 모든 레코드 대상.
+    
+       update 테이블
+       set 컬럼명1=값 , 컬럼명2=값 ;
+       commit;
+
+   나. 조건있는 update (********)
+     ==> 조건에 일치하는 레코드 대상.
+
+       update 테이블
+       set 컬럼명1=값 , 컬럼명2=값
+       where 조건식;
+       commit;
+
+  3) subquery 이용한 update
+
+    -- MySQL 에러 ( Oracle 가능 )
+     https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/update.html 참조
+    UPDATE dept
+    SET dname =(SELECT dname
+		     FROM dept
+	             WHERE deptno = 20 ) as X,
+       loc = ( SELECT loc
+	       FROM dept
+	       WHERE deptno = 30 ) as X2
+       WHERE deptno = 90;
+
+     -- MySQL 해결
+      UPDATE  dept , (SELECT dname              
+		      FROM dept             
+		      WHERE deptno = 20 ) as X,             
+		      (SELECT loc             
+		       FROM dept             
+		       WHERE deptno = 30 ) as X2
+      SET dept.dname = X.dname,    
+	  dept.loc =   X2.loc
+      WHERE deptno = 90;
+
+ 
+ 5. delete 문
+
+ 1) 용도
+   - 레코드 삭제.
+
+ 2) 문법
+
+   가. 조건식이 없는 형태
+
+      ==> 모든 레코드 대상임. 따라서 모든 레코드가 삭제됨
+
+        delete from 테이블명;
+
+
+   나. 조건식 있는 형태
+    
+     ==> 조건에 일치하는 레코드만 삭제.
+
+       delete from 테이블명
+       where 조건식;
+
+ 3) subquery는 지원 안됨.
+   ==> Oracle은 지원됨.
+
+  4) limit 지원.
+
+      delete from 테이블명
+      where 조건식
+      order by 표현식
+      limit n;
+######################################################################
+
+ 6. DDL ( Data Definition Language : 데이터 정의어 )
+
+   1) 용도
+     - 객체(테이블,인덱스,프로시저,사용자,..) 생성, 수정, 삭제할 때 사용하는 SQL문
+     - 무조건 auto commit 이다.(*****) ( 즉 commit/rollback 적용안됨 ) 
+
+   2) 테이블 생성 1
+
+     문법1: 
+           create table  IF NOT EXISTS 테이블명
+	   ( 컬럼명1  데이터타입,
+	     컬럼명2  데이터타입,
+	     ..
+	   );
+
+      ==> 컬럼에 중복데이터 저장이 가능해짐.
+      ==> 잘못된 데이터가 저장될 수 있다.
+      ==> IF NOT EXISTS ( oracle 지원 안됨 )
+      ==> INSERT 할때 컬럼명을 지정하지 않으면 null 값이 저장된다.
+         예> insert into 테이블명 ( 컬럼명1 )
+	    values ( 값1 );
+	   컬럼명2 에는 null 값이 저장된다.
+
+   3) 데이터타입
+https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/data-types.html
+     가. 수치형
+         
+	    - 정수: INTEGER(INT: 4byte), SMALLINT(2byte), MEDIUMINT(3byte), BIGINT(8byte)
+
+	    - 실수: 부동소수점: FLOAT, DOUBLE
+
+	           고정소수점: DECIMAL, NUMERIC
+
+     나. 문자형
+
+          -고정길이: char(n) : n byte ( n byte크기의 영문자및한글저장가능) , 0~255
+                 예> 성별, 학년
+                   char(2): 영문자 2글자, 한글 2글자 저장 가능
+	  
+	  -가변길이: varchar(n) : n btye( n byte크기의 영문자및한글저장가능)  , 0 ~ 65535
+                 ( Oralce: varchar2(n) 제공됨 )
+
+                   TEXT  : 길이 제한 없음.
+          - enum('값','값2')  : 지정된 값만 허용.
+           
+          - BLOB ( Binary Large Object ? ) : 이미지, 소리등 바이너리 데이터 저장용.
+
+
+     다. 날짜형
+
+          - DATE     :  0000-00-00,  curdate() 이용해서 insert
+	  - TIME     :  00:00:00  ,  curtime()  이용해서 insert
+	  - DATETIME :  0000-00-00 00:00:00 , now()  이용해서 insert
+	  - YEAR     :  0000
+
+
+    2) 테이블 생성 2
+     ==> default 키워드 이용하여 null 값 저장 방지.
+     문법2: 
+           create table  IF NOT EXISTS 테이블명
+	   ( 컬럼명1  데이터타입,
+	     컬럼명2  데이터타입 DEFAULT 기본값,
+	     ..
+	   );
+	
+      ==> 컬럼에 중복데이터 저장이 가능해짐.
+      ==> 잘못된 데이터가 저장될 수 있다.
+      ==> IF NOT EXISTS ( oracle 지원 안됨 )
+      ==> INSERT 할때 컬럼명2을 지정하지 않으면 null 값이 아닌 기본값으로 저장된다.
+        예> insert into 테이블명 ( 컬럼명1 )
+	   values ( 값1 );
+	   컬럼명2 에는 null 값이 아닌 기본값으로 저장된다.
+
+      용도:
+          -정해져 있는 값 (고정값) 예> 성별값,  게시판의 조회수
+	  -날짜
+
+
+7. 제약조건 설정하기
+
+  1) 테이블을 생성하면서 제약조건을  설정
+
+       가.  컬럼 레벨
+          create table  IF NOT EXISTS 테이블명
+	   ( 컬럼명1  데이터타입  제약조건설정1,
+	     컬럼명2  데이터타입  제약조건설정2,
+	     컬럼명3  데이터타입 DEFAULT 기본값,
+	     ..
+	   );
+         ==> 5개의 제약조건 모두 사용이 가능하다.
+
+       나.  테이블 레벨
+            create table  IF NOT EXISTS 테이블명
+	   ( 컬럼명1  데이터타입,
+	     컬럼명2  데이터타입 DEFAULT 기본값,
+	     컬럼명n  데이터타입,
+	     제약조건설정1,
+	     제약조건설정2
+	   );
+          ==> 4개의 제약조건 모두 사용이 가능하다.
+	      not null 제외( not null은 컬럼레벨만 지원)
+
+  2) 테이블을 먼저 생성하고 이후에 제약조건을 설정 (************)
+
+       가. 다음과 같이 컬럼명과 데이터타입
+
+          create table  IF NOT EXISTS 테이블명
+	   ( 컬럼명1  데이터타입,
+	     컬럼명2  데이터타입 DEFAULT 기본값,
+	     ..
+	   );
+
+	
+       나. 제약조건을 나중에 설정한다.
+
+          - Alter table add 제약조건설정문법 (테이블 레벨과 문법이 똑같다.)
+
+
+
+8. primary, unique, not null, check 4가지 제약조건 설정방법
+
+   1) 컬럼 레벨
+       CREATE TABLE student
+	 ( no INT PRIMARY KEY,
+	  name VARCHAR(10) UNIQUE ,
+	  address VARCHAR(10) NOT NULL, # 컬럼레벨만 가능
+	  age INT CHECK( age IN ( 10,20,30 )));
+
+   2) 테이블 레벨
+     
+       CREATE TABLE student2
+	 ( no INT,
+	   name VARCHAR(10),
+	   address VARCHAR(10) NOT NULL,   -- Not null 반드시 컬럼레벨만 지원
+	   age INT ,
+	 CONSTRAINT PRIMARY KEY(NO),
+	 CONSTRAINT UNIQUE(NAME),
+	 CONSTRAINT CHECK(age IN( 10,20,30 )));
+
+
+9. foreign key
+
+     -- master 테이블 작성
+	 create table master1
+	 ( num int primary key,
+	  name varchar(10) not null );
+	  
+	insert into master1 ( num, name ) values ( 1, 'aa');
+	insert into master1 ( num, name ) values ( 2, 'bb');
+	insert into master1 ( num, name ) values ( 3, 'cc');
+	insert into master1 ( num, name ) values ( 4, 'dd');
+	commit;
+
+  1) 컬럼 레벨
+ 
+       create table slave1
+	 (  n int primary key,
+	   num int   REFERENCES master1(num) ); 
+
+       ==> fk 제약조건이 생성이 안됨. (확인 필요)
+       https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/create-table.html
+
+  2) 테이블 레벨
+
+         -- slave 테이블 작성:  테이블 레벨
+	 drop table slave1;
+	 create table slave1
+	 (  n int primary key,
+	   num int,
+	   CONSTRAINT FOREIGN KEY(num)  REFERENCES master1(num) );  
+	   
+	insert into slave1 (n, num) values ( 10, 1 );
+	insert into slave1 (n, num) values ( 20, 2 );
+	insert into slave1 (n, num) values ( 30, 5 );   -- 에러발생
+	insert into slave1 (n, num) values ( 40, null );
+
+	select *
+	from information_schema.table_constraints
+	where table_name =  'slave1';
+
+ ==> MySQL 제약조건 추가시 not null은 컬럼레벨로 하고
+    나머지는 테이블 레벨로 설정하자. (*************)
+
+
+
+10. master 테이블의 레코드 삭제
+
+   # 삭제안됨. 
+   # fk가 참조하기 때문이다.
+   delete from master1
+   where num = 1;     
+
+   # 해결방법2가지
+
+     1) master와 slave 레코드를 같이 삭제
+
+         - ON DELETE CASCADE 
+
+      -- slave 테이블 작성:  테이블 레벨 ON DELETE CASCADE
+ drop table slave1;
+ create table slave1
+ (  n int primary key,
+   num int,
+   CONSTRAINT FOREIGN KEY(num)  REFERENCES master1(num)  ON DELETE CASCADE );  
+   
+insert into slave1 (n, num) values ( 10, 1 );
+insert into slave1 (n, num) values ( 20, 2 );
+-- insert into slave1 (n, num) values ( 30, 5 );   -- 에러발생
+insert into slave1 (n, num) values ( 40, null );
+commit;
+
+
+     2) slave 의 fk 값을 null 로 설정
+
+         - ON DELETE SET NULL
+
+ drop table slave1;
+ create table slave1
+ (  n int primary key,
+   num int,
+   CONSTRAINT FOREIGN KEY(num)  REFERENCES master1(num)  ON DELETE SET NULL );  
+   
+-- insert into slave1 (n, num) values ( 10, 1 );
+insert into slave1 (n, num) values ( 20, 2 );
+-- insert into slave1 (n, num) values ( 30, 5 );   -- 에러발생
+insert into slave1 (n, num) values ( 40, null );
+commit;
+
+
+
+11. 테이블 삭제
+
+  1) 문법
+
+    drop table IF NOT EXISTS 테이블명, 테이블명;
+
+  2) fk 가 참조하는 master 는 삭제 안됨.
+
+   예> drop table master1;  // 에러
+
+   해결: 
+
+      mysql:  CASCADE 지원안됨.
+      https://mariadb.com/kb/en/drop-table/
+             1) slave 먼저 삭제
+	     2) master 삭제
+
+
+      oracle:  drop table master1 CASCADE; 
+            ==> slave에 있는 fk 제약조건이 삭제됨.
+
+
+
+12. 테이블 절삭
+  
+   문법:
+        truncate table 테이블명;
+
+   동작:
+       모든 레코드가 삭제됨.
+       delete from 테이블명; 유사함.
+
+  * delete  vs truncate
+
+    delete:  - DML
+             - rollback 가능 (복구 가능)
+	     - 백업본 만들고 저장영역 유지
+
+    truncate: - DDL
+              - 복구 안됨 ( DDL은 auto commit )
+	      - 백업본 필요없음. 최소한의 저장영역만 유지
+	      - delete 보다 삭제성능이 우수하다.
+
+
+13. 테이블 수정
+ 
+   1) 컬럼 추가, 삭제
+   2) 컬럼 데이터 크기 변경, 타입 변경
+
+   3) 컬럼이름 변경
+
+   3) 제약조건 설정 (************)

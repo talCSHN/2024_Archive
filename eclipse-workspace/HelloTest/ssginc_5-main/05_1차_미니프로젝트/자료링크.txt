@@ -1,0 +1,13 @@
+
+1. ERD 자료
+
+ https://www.erdcloud.com/
+ https://shuu.tistory.com/64
+ https://mulmandu17.tistory.com/68
+
+
+2. 클래스 다이어그램
+
+https://brownbears.tistory.com/577
+https://effortguy.tistory.com/179
+https://gitmind.com/kr/uml-diagram-tool.html

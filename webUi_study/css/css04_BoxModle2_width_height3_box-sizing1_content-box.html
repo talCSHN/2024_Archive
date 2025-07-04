@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Box Model2 - width와 height3 box-sizing_ content-box</title>
+  </head>
+  <style>
+
+    #a{
+      width: 160px;
+      height: 80px;
+      background-color: yellow;
+      box-sizing: content-box;
+    }
+    #b{
+      width: 160px;
+      height: 80px;
+      border: 8px solid red;
+      background-color: aqua;
+      box-sizing: content-box;
+
+      /*
+          최종 width = 지정 width 값   + (2*border)
+                       160px + (2 * 8px) = 176px 
+      */
+    }
+    #c{
+      width: 160px;
+      height: 80px;
+      border: 8px solid red;
+      padding: 20px;
+      background-color: beige;
+      box-sizing: content-box;
+      /*
+          최종 width = 지정 width 값   + (2*border) + (2*padding)
+                       160px + (2 * 8px) + ( 2*20px) = 216px 
+      */
+    }
+    #d{
+      width: 160px;
+      height: 80px;
+      border: 8px solid red;
+      padding: 20px;
+      margin: 0px 200px 0px 0px;       /* top right bottom left  */
+      background-color: beige;
+      box-sizing: content-box;
+
+    }
+  </style>
+  <body>
+     <div id="a">hello1</div>
+     <div id="b">hello2</div>
+     <div id="c">hello3</div>
+     <div id="d">hello4</div>
+  </body>
+</html>

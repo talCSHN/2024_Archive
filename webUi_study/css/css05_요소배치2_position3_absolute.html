@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>css05_요소배치2_position3_absolute</title>
+    <style>
+      html{
+        border: 10px solid blue;
+      }
+      div.relative{
+        width: 400px;
+        height: 200px;
+        border: 3px solid aqua;
+
+        position: relative;
+        top: 100px;
+        right: 0px;
+      }
+
+      div.absolute{
+        width: 200px;
+        height: 100px;
+        border: 3px solid red;
+
+        position: absolute;
+        top: 100px;
+        right: 0px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>absolute 실습</h2>
+    <p>
+    ==> 배치 컨텍스트(기준)는 가장 가까운 부모(조상)이다.
+    ==> 2가지 상황이 있음
+    가. 부모(조상)에 position 없는 경우
+    - html(body) 기준
+    - top,left,right,bottom 속성이 적용이 됨.
+
+    나. 부모(조상)에 position:relative 있는 경우
+    - 부모 기준
+    - top,left,right,bottom 속성이 적용이 됨.
+
+    </p>
+    <div class="relative">
+    배치 컨텍스트(기준)는 가장 가까운 부모(조상)이다.
+      <div class="absolute">
+      absolute 실습
+      </div>
+  </div>
+  </body>
+</html>

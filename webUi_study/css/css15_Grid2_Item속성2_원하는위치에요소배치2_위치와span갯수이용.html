@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>grid</title>
+<style type="text/css">
+
+ .item-1{
+    background-color: antiquewhite;
+ }
+ .item-2{
+    background-color: red;
+    /* 2번은 현재 행에 배치가 가능해서 새로운 줄없이 
+      현재줄에 적용됨.
+    */
+    /* grid-column-start: 2;
+    grid-column-end: span 3;  */
+
+    grid-column: 2/span 3;
+ }
+ .item-3{
+    background-color: blue;
+
+    /*
+      3번은 번호 2부터 5까지 차지함.
+      2번과 한줄에 배치가 불가능하기 때문에
+      다음라인에 배치됨.
+      4번은 3번과 한줄에 배치가 불가능해서
+      다음라인에 배치된.
+
+    */
+     /* grid-column-start: 2;
+    grid-column-end: span 3;  */
+    grid-column: 2/ span 3;
+
+    /* grid-row-start: 3;
+    grid-row-end: span 2;  */
+     grid-row: 3/span 2;
+
+ }
+ .item-4{
+    background-color: aqua;
+
+    /* grid-row-start: 2;
+    grid-row-end: 3; */
+
+    grid-row: 2/3;
+
+   }
+ .item-5{
+    background-color: yellow;
+ }
+ .item-6{
+    background-color: blueviolet;
+ }
+ .grid-container div{
+    height: 80px;
+ }
+
+
+ .grid-container{
+    margin: 20px;
+    display: grid;
+
+    grid-template-columns: repeat(4, 250px);
+   
+ }
+
+</style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="item-1">item1</div>
+        <div class="item-2">item2</div>
+        <div class="item-3">item3</div>
+        <div class="item-4">item4</div>
+    </div>
+</body>
+</html>

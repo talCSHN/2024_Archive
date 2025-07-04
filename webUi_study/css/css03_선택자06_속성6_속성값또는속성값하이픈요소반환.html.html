@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>선택자6-속성6-속성값 또는 속성값- 찾아서 반환</title>
+    <style>
+      div[class|="en"]{
+        color: red;
+      }
+  
+    </style>
+  </head>
+
+  <body>
+    <div id="one">id="one"</div>
+    <div class="en" >class="en"(선택)</div>
+    <div class="kr en">class="kr en"</div>
+    <div class="kr"> class="kr"</div>
+    <div id="two" class="en-UK">class="en-UK"(선택)</div>
+  </body>
+</html>

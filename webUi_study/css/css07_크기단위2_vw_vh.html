@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>css07_크기단위2_viewport 기준의 width와 height인 vw, vh</title>
+    <style>
+      #a{
+        background-color: red;
+        width: 500px;
+        height: 500px;
+      }
+      .x2{
+        background-color: blue;
+        position: fixed;
+        width: 50%;
+      }
+
+      .x{
+        /* position: relative; vw와 vh는 지정된 position과 무관 */
+        background-color: blue;
+        width: 50vw;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="a">
+      <h1 class="x">Hello1</h1>
+      </div>
+  </body>
+</html>

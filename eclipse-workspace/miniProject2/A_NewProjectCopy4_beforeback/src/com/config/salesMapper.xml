@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.config.salesMapper">
+
+  	<select id="findAll" resultType="salesDTO">
+  		select sale_id, product_id, sale_date, quantity,total_amount
+  		from sales_table
+  	</select>
+  	
+  	
+  	<select id="findTy" resultType="salesDTO">
+  		select date_format(sale_date, '%Y') as sale_date, sum(total_amount) as sum
+		from sales_table
+		group by date_format(sale_date, '%Y')
+		order by sale_date
+  	</select>
+  	<select id="findTm" resultType="salesDTO">
+  		select date_format(sale_date, '%Y %M') as sale_date, sum(total_amount) as sum
+		from sales_table
+		group by date_format(sale_date, '%Y %M')
+		order by sale_date
+  	</select>
+  	<select id="findTd" resultType="salesDTO">
+  		select sale_date, sum(total_amount) as sum
+		from sales_table
+		group by sale_date
+		order by sale_date
+  	</select>
+  	
+  	
+  	
+  	<insert id="save" parameterType="salesDTO">
+  		insert into sales_table ( product_id, sale_date, quantity,total_amount)
+  		values ( #{product_id}, #{sale_date}, #{quantity}, #{total_amount} )
+  	</insert>
+  	
+  	<update id="update" parameterType="salesDTO">
+  		update sales_table
+  		set product_id=#{product_id}, sale_date=#{sale_date}, quantity=#{quantity}, total_amount=#{total_amount}
+  		where sale_id = #{sale_id}
+  	</update>
+  	
+  	<delete id="remove" parameterType="int">
+  		delete from sales_table
+  		where sale_id = #{sale_id}
+  	</delete>
+</mapper>

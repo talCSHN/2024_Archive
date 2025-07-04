@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>flex 실습</title>
+<style type="text/css">
+    .item-1{
+        background-color: antiquewhite;
+    }
+    .item-2{
+        background-color: red;
+    }
+.item-3{
+background-color: blue;
+}
+.item-4{
+background-color: aqua;
+}
+.item-5{
+background-color: yellow;
+}
+.item-6{
+background-color: blueviolet;
+}
+
+.grid-container div{
+    height: 80px;
+    
+}
+    .grid-contatiner{
+        margin: 20px;
+        display: grid;
+        grid-auto-flow: row;
+        grid-template-rows: repeat(4, 50px);
+    }
+
+    .grid-contatiner2{
+        margin: 20px;
+        display: grid;
+        grid-auto-flow: row;
+        height: 400px;
+        grid-template-rows: 25% 25% 25% 25%;
+    }
+
+    .grid-contatiner3{
+        margin: 20px;
+        display: grid;
+        grid-auto-flow: row;
+        height: 400px;
+        grid-template-rows: 80px 2rem 150px auto;
+    }
+
+    .grid-contatiner4{
+        margin: 20px;
+        display: grid;
+        grid-auto-flow: row;
+        height: 400px;
+        grid-template-rows: 78px 2rem 2fr 1fr;
+    }
+
+</style>
+</head>
+<body>
+    <div class="gird-container">
+        <div class="item-1">item1</div>
+        <div class="item-2">item2</div>
+        <div class="item-3">item3</div>
+        <div class="item-4">item4</div>
+        
+    </div>
+
+    <div class="gird-container2">
+        <div class="item-1">item1</div>
+        <div class="item-2">item2</div>
+        <div class="item-3">item3</div>
+        <div class="item-4">item4</div>
+        
+    </div>
+
+    <div class="gird-container3">
+        <div class="item-1">item1</div>
+        <div class="item-2">item2</div>
+        <div class="item-3">item3</div>
+        <div class="item-4">item4</div>
+        
+    </div>
+
+    <div class="gird-container4">
+        <div class="item-1">item1</div>
+        <div class="item-2">item2</div>
+        <div class="item-3">item3</div>
+        <div class="item-4">item4</div>
+        
+    </div>
+</body>
+</html>

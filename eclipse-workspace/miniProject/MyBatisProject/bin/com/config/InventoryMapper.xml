@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.config.InventoryMapper">
+  		<select id="findAllInventory" resultType="InventoryDTO">
+  			select InventoryID, ProductID, Quantity
+  			from tb_Inventory
+  		</select>
+  		
+  		<insert id="insertInventory" parameterType="InventoryDTO">
+  			insert into tb_Inventory (InventoryID, ProductID, Quantity)
+  			values ( #{inventoryID}, #{productID}, #{quantity} )
+  		</insert>
+  		
+  		<update id="updateInventory" parameterType="InventoryDTO">
+  			update tb_Inventory
+  			set InventoryID = #{inventoryID}, ProductID = #{productID}, Quantity = #{quantity}
+  			where InventoryID=#{inventoryID}
+  		</update>
+  		
+  		<delete id="removeByInventoryID" parameterType="InventoryDTO" >
+      		delete from tb_Inventory
+      		where InventoryID =#{InventoryID}
+   		</delete>
+  		
+  </mapper>

@@ -1,0 +1,35 @@
+package exam12_상속후_4_이클립스;
+
+public class Engineer extends Employee {
+
+	String skill;	// Engineer에서만 추가된 속성
+
+	public String getSkill() {
+		return skill;
+	}
+
+	public void setSkill(String skill) {
+		this.skill = skill;
+	}
+
+	@Override
+	public String getEmployee() {
+		return super.getEmployee() + "\t" + skill;	// super. 안붙이면 재귀호출됨
+	}
+
+	public Engineer() {
+		super();
+	}
+
+	public Engineer(String name, int salary) {
+		super(name, salary);
+	}
+
+	public Engineer(String name, int salary, String skill) {
+		super(name, salary);
+		this.skill = skill;
+	}
+
+		
+	
+}

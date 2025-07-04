@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.config.inventoryMapper">
+
+  	<select id="findAll" resultType="inventoryDTO">
+  		select product_id, stock_amount, last_updated
+  		from inventory_table
+  	</select>
+  	
+  	<insert id="save" parameterType="inventoryDTO">
+  		insert into inventory_table ( product_id, stock_amount, last_updated)
+  		values ( #{product_id}, #{stock_amount}, #{last_updated})
+  	</insert>
+  	
+  	<update id="update" parameterType="inventoryDTO">
+  		update inventory_table
+  		set stock_amount=#{stock_amount}, last_updated=#{last_updated}
+  		where product_id = #{product_id}
+  	</update>
+  	
+  	<delete id="remove" parameterType="int">
+  		delete from inventory_table
+  		where inventory_id = #{inventory_id}
+  	</delete>
+</mapper>

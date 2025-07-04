@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>css05_요소배치2_position3_absolute</title>
+    <style>
+      img{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: -1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>z-index 실습</h2>
+    <img src="images/001.png" width="100px" height="100px">
+    <p>
+    absolute 와 fixed 문서 대열 (document flow, normal flow)에서 제외됨.
+    따라서 요소들이 겹쳐서 랜더링 될 수 있다.
+    stack에 요소들을 쌓게 된다.
+    </p>
+  </body>
+</html>

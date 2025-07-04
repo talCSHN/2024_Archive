@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>css05_요소배치2_position1_static</title>
+    <style>
+      div.static{
+        border: 2px solid red;
+
+        position: static; /*static일때 적용안됨*/
+        top: 100px; /*static일때 적용안됨*/
+        left: 500px; /*static일때 적용안됨*/
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>static 실습</h2>
+    <p>
+    기본.
+    기본적인 문서 대열 ( document flow, normal flow)를 따른다.
+    따라서 임의적으로 위치변경이 불가능하다.
+    즉 top,left,right,bottom 속성이 적용이 안됨.
+    역으로 top,left,right,bottom 속성이 적용될려면 static이 아닌 다른값으로 지정해야 된다.
+    </p>
+    <div class="static">
+    기본적인 문서 대열 ( document flow, normal flow)를 따른다.
+    </div>
+  </body>
+</html>

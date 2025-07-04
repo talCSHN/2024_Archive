@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.config.productMapper">
+
+  	<select id="findAll" resultType="productDTO">
+  		select product_id, product_name, price, description, stock
+  		from product_table
+  	</select>
+  	
+  	<insert id="save" parameterType="productDTO">
+  		insert into product_table ( product_name, price, description, stock)
+  		values ( #{product_name}, #{price}, #{description}, #{stock} )
+  	</insert>
+  	
+  	<update id="update" parameterType="productDTO">
+  		update user_table
+  		set product_name=#{product_name}, price=#{price}, description=#{description}, stock=#{stock}
+  		where product_id = #{product_id}
+  	</update>
+  	
+  	<delete id="remove" parameterType="int">
+  		delete from product_table
+  		where product_id = #{product_id}
+  	</delete>
+</mapper>

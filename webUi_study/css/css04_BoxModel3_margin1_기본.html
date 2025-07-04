@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Box Model3 - margin1_기본</title>
+    <style>
+
+      div{
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+      }
+
+      #a{
+        margin-top:10px;
+        margin-right:10px;
+        margin-bottom:10px;
+        margin-left:10px;
+      }
+
+      #b{
+        /* margin: top  right  bottom left  */
+        margin: 10px  10px  10px  10px; 
+      }
+
+      #c{
+        /*  margin: top  right|left bottom */
+        margin: 10px  10px  10px ;
+      }
+
+      #d{
+        /* margin: top|bottom  right|left */
+        margin: 10px  10px;
+      }
+
+      #e{
+        /* margin: top|bottom|right|left */
+        margin: 10px;
+      }
+    </style>
+  </head>
+  
+  <body>
+     <div id="a">hello1</div>
+     <div id="b">hello2</div>
+     <div id="c">hello3</div>
+     <div id="d">hello4</div>
+     <div id="e">hello5</div>
+  </body>
+</html>

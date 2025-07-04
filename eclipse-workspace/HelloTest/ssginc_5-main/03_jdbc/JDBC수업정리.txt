@@ -1,0 +1,203 @@
+
+ JDBC ( Java DataBase Connectivity )
+
+
+ 1. 개요
+   - 자바와 DB 연동하는 자바기술.
+
+ 2. 특징
+   - JDBC는 DBMS 종류와 무관하게 일관된 방법으로 접근이 가능하다. ( 인터페이스 + 다형성 )
+   - DBMS 종류와 독립적이다.
+     단 DBMS 벤더가 JDBC를 지원해야 된다. (*********)
+   - DBMS 벤더는 사용자가 만든 자바어플리케이션과 
+     DBMS 간의 연동을 위해서 클래스파일(*.jar 압축) 제공한다.
+   - DBMS 벤더에서 제공해준 jar 파일을 '드라이버(driver)'라고 부른다.
+
+      (*.class )                             (*.class )
+     자바어플리케이션  -------------------------- MySQL  ( mysql-connector-j-8.jar )
+                   -------------------------- Oracle ( ojdbc6-g.jar )
+		   -------------------------- MS-SQL ( *.jar)
+
+         자바                                      벤더
+	1)인터페이스                                MySQL
+	                        
+	Connection 인터페이스                  public class MYSQL_CONNECT implements Connection{
+	   abstract connect();                    public void connect(){}
+
+                                                 Oracle
+                                             public class ORACLE_CONNECT implements Connection{
+                                                  public void connect(){}
+       Connection con = new MYSQL_CONNECT();
+                  con = new ORACLE_CONNECT();
+                con.connect()
+
+3. mysql 연동하기 위한 환경설정
+
+   1) MySQL 드라이버 다운로드
+  
+   http://dev.mysql.com/downloads/connector/j > platform independent > 4.8M zip 다운 >
+   압축 해체 > mysql-connector-j-8.3.0.jar ( mysql 드라이버 )
+
+   2) 이클립스에서 MySQL 드라이버(jar)를 인식하도록 설정
+     - build path 한다고 부른다.
+    
+     - 자바프로젝트 선택 > 오른쪽 클릭 > build path > configure build path > 3번째 탭 libraries > 
+       classpath 선택하고 오른쪽 항목에서  Add External jars.. 클릭 > mysql-connector-j-8.3.0.jar 선택
+
+
+4. JDBC 자바 코드
+  
+   ==> compile checed exception 계열 (비런타임 계열)이다.
+       즉 무조건 예외처리해야된다. (try~catch 필수 )
+ 
+   ==> java.sql 패키지 사용됨
+
+    1) mysql 접속 정보
+
+      String driver ="com.mysql.cj.jdbc.Driver";
+      String url = "jdbc:mysql://localhost:3306/testdb";
+      String userid ="root";
+      String passwd = "1234";
+ 
+     * oracle 접속 정보
+      String driver ="oracle.jdbc.driver.OracleDriver";
+      String url = "jdbc:oracle:thin:@localhost:1521:서비스명";
+      String userid ="system|sys";
+      String passwd = "1234";
+
+    2) 드라이버 로딩 ( com.mysql.cj.jdbc.Driver 클래스를 객체생성하는 작업 의미 )
+      => 이전 처럼 new 사용안함.
+         대신 Class.forName(문자열);
+
+          Class.forName(driver); 
+
+    3) Connection 연결
+
+       Connection con =  DriverManager.getConnection(url, userid, passwd);
+
+     
+    4) sql문 작성
+     ==> 문장끝의 ; 반드시 제외.
+
+      String sql = "select deptno as no, dname, loc from dept";
+
+    
+    5) PreparedStatement 얻기 (sql문 전송 담당 객체) 
+
+       PreparedStatement pstmt = con.prepareStatement​( sql);
+
+    
+    6) sql 문 전송.
+
+
+       가. select문 ==> 결과를 테이블 형태로 받음.
+                       테이블 객체화: ResultSet
+
+           ResultSet rs  = pstmt.executeQuery();
+
+       나. DML문    ==> 결과를 정수(영향받은 행갯수) 받음.
+
+          int n = pstmt.executeUpdate(); // update,insert,delete
+
+
+    7) ResultSet 에서 컬럼값 얻기
+
+      while( rs.next() ){ // 행선택
+
+          //열 선택
+	  int deptno = rs.getInt("no");   // 컬럼헤더|위치(1부터)
+          int deptno2 = rs.getInt(1);
+
+	  String dname = rs.getString("dname"); // 2
+          String loc = rs.getString("loc"); // 3
+
+      }
+
+     8) DBMS 는 외부자원이기 때문에 항상 close() 
+
+         사용한 순서
+	 Connection con연결
+	 PreparedStatement  pstmt얻기
+	 ResultSet rs 얻기
+
+
+	 close 작업은 사용한 역순
+           rs.close();
+	   pstmt.close();
+	   con.close();
+
+
+
+
+
+5. sql 문에 실제 데이터 설정하는 방법
+
+   1) 용도
+      - INSERT
+      - DELETE
+      - UPDATE
+      - SELECT
+
+   2) select 문에서 설정 예
+
+     예> select *
+        from 
+	where deptno = 실제값;
+
+	String sql = "select deptno as no, dname, loc from dept
+	             where deptno = ? or dname= ?";
+
+         PreparedStatement pstmt = con.prepareStatement(sql);
+         // ? 대신에 실제값을 지정 ( ? 을 바인딩 변수라고 부른다 )
+	 //  pstmt.setXXX( ?순서, 값);
+ 
+            pstmt.setInt( 1, 10 );
+	    pstmt.setString(2,"개발");
+
+	 ResultSet rs =  pstmt.executeQuery();
+	   rs.getXXX
+
+
+
+6. DML
+ => JDBC는 기본적으로 auto commit 으로 동작된다. (************)
+   계좌이체등과 같은 트랜잭션으로 처리해야 되는 작업을 할수 없음.
+
+#############################################################
+5. 기능 분리 
+
+  가. 현재상황( 3가지 기능이 하나의 클래스에서 처리되고 있음 )
+
+     SelectTest.java   <----------------------------> MySQL
+        main()
+     - 화면처리코드(Swing)
+     - 비즈니즈로직코드(가공)
+     - DB연동코드
+
+
+   
+  나. 기능분리
+                           DeptService(인터페이스)
+                                |
+				|
+   DeptMain     <---->      DeptServiceImpl       <---->     DeptDAO     <----> MySQL(파일)
+    main()  
+    화면처리코드                -비즈니즈로직코드(가공)             - DB연동코드
+                             -트랜잭션처리(*****)
+
+  - DeptDAO에서 얻은 결과값을 DeptMain에 전달하는 작업을 추가하자.
+    하나의 행을 저장하는 클래스를 작성한다. 
+    ==> DeptDTO.java
+
+  * 패턴
+  DAO 패턴: - Data Access Object 패턴
+           - 데이터(DB,파일등)에 접근시 전담하는 클래스
+
+  DTO 패턴: - Data Transfer Object 패턴
+           - 일반적으로 테이블당 하나씩 작성해서
+	     테이블의 하나의 레코드를 저장하는 용도로 사용됨.
+	     예> dept테이블: DeptDTO.java
+	        emp테이블: EmpDTO.java
+
+6. 중복 deptno 값 입력시 예외처리
+  => 개인적으로 정리하기.

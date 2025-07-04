@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>선택자7-의사클래스1_a태그</title>
+    <style>
+              a:link{color:red;}        /* 방문전  */ 
+              a:visited{color:green;}   /* 방문후  */ 
+              a:hover{color:yellow;}    /* 마우스 오버  */ 
+              a:active{color:blue;}      /* 누르고 있을 때  */ 
+
+              input:focus{
+                background-color:yellow;
+              }
+    </style>
+  </head>
+
+  <body>
+    <a href="#" target="_blank">This is a link1</a><br>
+    <a href="http://www.daum.net" target="_blank">This is a link2</a><br>
+    <br>
+    아이디:<input /><br>
+    비번:<input /><br>
+  </body>
+</html>

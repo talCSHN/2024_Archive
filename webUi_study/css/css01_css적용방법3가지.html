@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>css 적용방법 3가지</title>
+    <style>
+        .x{
+            /* COLOR:BLUE;  속성명과 속성값은 대소문자 구별 안함*/
+            color:yellow;
+        }
+        p{
+          color: blue;
+      }
+    </style>
+    </style>
+    <link rel="stylesheet" href="test.css">
+  </head>
+  <body>
+    <!-- 인라인 스타일 -->
+    <p style="color: red;">Hello1</p>
+    <span style="color: red; background-color: yellow;">Hello2</span>
+    
+    <!-- 내부 스타일(internal style) -->
+    <p class="x">Hello3</p>
+    <span class="x">Hello4</span>
+
+    <!-- 외부 스타일(external style) -->
+    <p id="a">Hello5</p>
+    <span id="b">Hello6</span>
+
+  </body>
+</html>

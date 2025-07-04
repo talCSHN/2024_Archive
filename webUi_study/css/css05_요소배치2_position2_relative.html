@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>css05_요소배치2_position2_relative</title>
+    <style>
+      div.relative{
+        border: 2px solid red;
+
+        position: relative; /*static일때 적용안됨*/
+        top: 100px; /*static일때 적용안됨*/
+        left: 200px; /*static일때 적용안됨*/
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>relative 실습</h2>
+    <p>
+    배치 컨텍스트(기준)는 기본적인 문서 대열(document flow, normal flow)이다.
+    top,left,right,bottom 속성이 적용이 됨.
+    </p>
+    <div class="relative">
+    기본적인 문서 대열 ( document flow, normal flow) 기준으로
+    위치가 결정됨.
+    </div>
+  </body>
+</html>

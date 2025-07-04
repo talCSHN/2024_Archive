@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ready 메서드</title>
+  <!--다운로드 방식-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script></script>
+  <script>
+    
+    $(document).ready(function(){
+      
+      //1. 모든 태그 선택
+      //console.log(jQuery("*"));
+      //$("*").css("color","red");
+
+      //2. 특정 태그 선택
+      //$("p").css("color","red");
+
+      //3. id로 선택
+      //$("#x").css("color","red");
+
+      //4. class로 선택
+      //$(".y").css("color","red");
+
+      //5. 여러 개 선택
+      //$("#x, .z").css("color","red");
+
+      //6. 속성으로 선택
+      //$("[class]").css("color","red");
+      //$("[class='z']").css("color","red");
+      //$("[href^='https']").css("color","red");
+      //$("[href$='com']").css("color","red");
+
+      //7. 계층구조 - 자식/자손
+      //https://api.jquery.com/category/selectors/hierarchy-selectors/
+
+      //자식 선택
+      //$("div > a").css("color", "red");
+
+      //자손 선택(자식포함)
+      //$("div  a").css("color", "red");
+      
+      //8. 계층구조 - 형제/형제들
+
+      //바로 뒤 형제
+      //$("p+a").css("color", "red");
+
+      //뒤 형제들
+      //$("p~a").css("color", "red");
+
+    });
+    
+  </script>
+</head>
+<body>
+  <div>
+    <p class="y">셀렉터</p>
+    <a href="http://naver.com" class="y">naver</a><br/>
+    <a href="https://daum.net" class="y">daum</a><br/>
+    <a href="https://google.com" class="z">google</a><br/>
+    <p>
+    <a href="#" id="x">자손</a>
+    </p>
+    <p>
+    <span><a href="xxx">자손2</a></span>
+    </p>
+    </div>
+  
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>css07_크기단위1_position값에따른퍼센트</title>
+    <style>
+      #a{
+        background-color: red;
+        width: 500px;
+        height: 500px;
+      }
+
+      .x{
+        background-color: blue;
+        /* position:fixed + % 사용하면  viewport 기준으로 비율로 width|height 설정 가능*/
+        position: fixed;
+        width: 50%;
+      }
+
+      .x2{
+        background-color: yellow;
+        position: relative;
+        width: 50%;
+      }
+
+      #b{
+        background-color: aqua;
+        width: 400px;
+        height: 400px;
+        position: relative;
+      }
+
+      .x3{
+        background-color: yellow;
+        position: absolute;
+        width: 50%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="a">
+      <h1 class="x">Hello1(fixed, 뷰포트기준)</h1>
+      <h1 class="x2">Hello2(relative, 가까운부모기준, 반드시 부모는 블럭레벨)</h1>
+      </div>
+      
+      <div id="b">
+      <h1 class="x3">Hello3(absolute, relative로 지정된 부모기준)</h1>
+      </div>
+
+  </body>
+</html>

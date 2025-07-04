@@ -1,0 +1,122 @@
+Swing 수업정리
+
+1. Java의 GUI(Graphic User Interface) 구현
+
+   가. AWT ( Abstract Window Toolkit )
+      - 초창기 버전
+      - OS 자원이용해서 GUI 랜더링됨.
+        따라서 OS에 따라서 화면이 달라보임.
+
+   나. Swing
+      - Swing 자신의 자원이용해서 GUI 랜더링됨.
+        따라서 OS에 모두 동일한 화면으로 보임.
+      - 일반PC(Desktop) 위주
+
+
+   다. JavaFX
+       - Swing 보다 가볍고 더 강력함.
+       - 일반PC(Desktop) 위주보다는 모바일(핸드폰,PDA,임베디드) 환경의 GUI 제공.
+ 
+	 
+2. Swing API 계층 구조
+
+                Object
+	         |
+	      Component
+	          |
+    Container          일반컴포넌트 (JButton, JLabel, JList, JTable,...)
+        |                       
+ Panel       Window
+               |
+	 Frame    Dialog
+          |          |
+	JFrame     JDialog
+
+     
+   일반컴포넌트: 반드시 Container(Panel 또는 Frame) 에 담겨서 랜더링이 가능하다.
+   Panel: 다른 컴포넌트를 담을수 있는 Container지만 독자적으로 랜더링이 안됨. (*******)
+          따라서 최종적으로 독자적으로 랜더링이 가능한 Frame에 담겨서 랜더링이 된다.
+   Frame: 독자적으로 랜더링이 가능
+
+
+3. 레이아웃(Layout)
+   
+   가. 역할 및 특징
+     - 컴포넌트(JButton)의 위치와 크기를 관리하는 컴포넌트이다. 
+     - 기본 레이아웃을 포기하고 특정 레이아웃으로 변경 가능.
+      
+   나. 종류
+
+      a. BorderLayout
+         - Frame의 기본 레이아웃.
+	 - 5개의 정해진 위치에 배치( 각 영역에 하나씩만 배치 가능 )
+	 - NORTH, EAST, WEST, CENTER, SOUTH 상수값 제공
+	 예> BorderLayout.NORTH
+
+      b. GridLayout
+         - 행과 열로 구성된 격자로 배치.
+
+      c. CardLayout
+         - 카드가 겹치는 형태로 배치.
+	   한번에 단 하나의 컴포넌트만 보임.
+ 
+      d. FlowLayout
+         - Panel의 기본 레이아웃.
+	   왼쪽에서 오른쪽으로, 위에서 아래로 배치.
+
+      e. AbsoluteLayout (*******) 
+         - 사용자가 원하는 위치에 배치.
+
+
+
+4. 이벤트 처리 방법 ( event handling)
+
+   가. 이벤트 소스 ( event source)
+     - 이벤트가 발생된 컴포넌트 의미
+     예> JButton btnOk = new JButton("ok");
+
+   나. 이벤트소스와 이벤트 핸들러 연결.
+      문법:  이벤트소스.addXXXListener(값);
+   
+       예> btnOk.addActionListener(new MyButtonEvent());
+
+   다. 이벤트 핸들러 ( event handler )
+     - 이벤트소스에서 발생된 이벤트를 처리하는 클래스 의미.
+     - 인터페이스로 제공됨. ( JButton 용 인터페이스는 ActionListener 이다. )
+
+     - 문법 적용
+
+        가. 이름있는 클래스
+
+	   a. GUI 클래스 자신이 implments 받는 경우
+             public class JComponent01_JButton extends JFrame implments ActionListener{
+	      private JPanel contentPane;
+	      ...
+              pullic void actionPerformed(ActionEvent e){
+		  System.out.prinltln("ok");
+	      }
+	   }
+
+          b. GUI 클래스와 별개의 클래스가 implments 받는 경우
+
+           public class JComponent01_JButton extends JFrame{}
+
+	   public class MyButtonEvent implments ActionListener{
+              pullic void actionPerformed(ActionEvent e){
+		  System.out.prinltln("ok");
+	      }
+	   }
+           ActionListener btnOk = new MyButtonEvent();
+
+
+
+        나. 익명클래스
+	    ActionListener btnOK = new ActionListener(){
+                    pullic void actionPerformed(ActionEvent e){
+		       System.out.prinltln("ok");
+	           }
+	    };
+
+	  
+
+   

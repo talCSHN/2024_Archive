@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.config.TransactionMapper">
+  		<select id="findAllTransaction" resultType="TransactionDTO">
+  			select TransactionID, TransactionDate, Amount
+  			from tb_Transaction
+  		</select>
+  		
+  		<insert id="insertTransaction" parameterType="TransactionDTO">
+  			insert into tb_Transaction (TransactionID, TransactionDate, Amount)
+  			values ( #{transactionID}, #{transactionDate}, #{amount} )
+  		</insert>
+  		
+  		<update id="updateTransaction" parameterType="TransactionDTO">
+  			update tb_Transaction
+  			set TransactionID = #{transactionID}, TransactionDate = #{transactionDate}, Amount = #{amount}
+  			where TransactionID=#{transactionID}
+  		</update>
+  		
+  		<delete id="removeByTransactionID" parameterType="TransactionDTO" >
+      		delete from tb_Transaction
+      		where TransactionID =#{transactionID}
+   		</delete>
+  		
+  </mapper>

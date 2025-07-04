@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>grid-template-columns 열갯수 생성</title>
+<style type="text/css">
+
+ .item-1{
+    background-color: antiquewhite;
+ }
+ .item-2{
+    background-color: red;
+ }
+ .item-3{
+    background-color: blue;
+ }
+ .item-4{
+    background-color: aqua;
+ }
+ .item-5{
+    background-color: yellow;
+ }
+ .item-6{
+    background-color: blueviolet;
+ }
+ .grid-container div{
+    height: 80px;
+ }
+
+
+ 
+ .grid-container{
+    margin: 20px;
+    display: grid;
+    
+    grid-auto-flow: row;
+
+    /* grid-template-columns: 150px 150px 150px 150px; */
+    grid-template-columns: repeat(4, 150px);
+   }
+   .grid-container2{
+      margin: 20px;
+      display: grid;
+      
+      grid-auto-flow: row;
+      
+      /* grid-template-columns: 25% 25% 25% 25%; */
+      grid-template-columns: repeat(4, 25%);
+ }
+
+ .grid-container3{
+      margin: 20px;
+      display: grid;
+      
+      grid-auto-flow: row;
+      
+      /* grid-template-columns: 150px 150px 150px auto; */
+      grid-template-columns: 50% 150px 2rem auto;
+ }
+
+ .grid-container4{
+      margin: 20px;
+      display: grid;
+      
+      grid-auto-flow: row;
+      
+      grid-template-columns: 50% 150px 2fr 1fr;
+ }
+
+ .grid-container5{
+      margin: 20px;
+      display: grid;
+      
+      grid-auto-flow: row;
+      
+      grid-template-columns: 50% 150px 2rem;
+      /* 지정되지 않은 4열과 5열은 다음 행으로 너머어가서 기존열의 크기를 갖는다. */
+ }
+</style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="item-1">item1</div>
+        <div class="item-2">item2</div>
+        <div class="item-3">item3</div>
+        <div class="item-4">item4</div>
+    </div>
+    <div class="grid-container2">
+      <div class="item-1">item1</div>
+      <div class="item-2">item2</div>
+      <div class="item-3">item3</div>
+      <div class="item-4">item4</div>
+  </div>
+  <div class="grid-container3">
+   <div class="item-1">item1</div>
+   <div class="item-2">item2</div>
+   <div class="item-3">item3</div>
+   <div class="item-4">item4</div>
+</div>
+
+<div class="grid-container4">
+    <div class="item-1">item1</div>
+    <div class="item-2">item2</div>
+    <div class="item-3">item3</div>
+    <div class="item-4">item4</div>
+ </div>
+
+ <div class="grid-container5">
+    <div class="item-1">item1</div>
+    <div class="item-2">item2</div>
+    <div class="item-3">item3</div>
+    <div class="item-4">item4</div>
+ </div>
+</body>
+</html>
