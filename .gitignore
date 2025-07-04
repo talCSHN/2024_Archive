@@ -1,3 +1,16 @@
+# === 실행파일 및 바이너리 ===
+*.exe
+*.dll
+*.so
+*.dylib
+*.bin
+*.o
+*.obj
+*.out
+*.apk
+*.app
+
+
 # Compiled class file
 *.class
 
