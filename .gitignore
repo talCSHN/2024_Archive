@@ -12,6 +12,9 @@
 
 .metadata/
 
+*.msi
+
+
 # === Jenkins 관련 ===
 .jenkins/           # Jenkins 홈 디렉토리 (로컬 테스트 시 생성됨)
 *.jenkinsfile       # Jenkins 설정 파일이지만 템플릿일 경우 무시할 수도 있음
