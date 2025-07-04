@@ -10,6 +10,9 @@
 *.apk
 *.app
 
+.metadata/
+
+
 
 # Compiled class file
 *.class
